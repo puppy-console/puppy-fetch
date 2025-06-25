@@ -2,7 +2,7 @@
 
 Prerequisites:
 - ruby >= 3.2
-- git (recommended)
+- git
 
 ---
 ```
