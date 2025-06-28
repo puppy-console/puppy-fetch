@@ -20,7 +20,7 @@ cd puppy-fetch
 
 # Using the CLI:
 
-1. Add an alias (`RECOMMENDED`):
+1. Add an alias ( `RECOMMENDED` ):
 ```
 alias puppy-fetch="ruby -I lib bin/puppy-fetch"
 ```
