@@ -3,7 +3,7 @@ require 'open-uri'
 require 'base64'
 require 'fileutils'
 
-class GithubAPI 
+class GithubApi
     BASE_URL = "https://api.github.com"
     
     CURRENT_USER_URL = "#{BASE_URL}/user"
@@ -43,12 +43,21 @@ class GithubAPI
         @auth_token = auth_token
     end
 
+    def error?() return @error end
+    def error() return @error end
+
     def uri_open_safe(uri, headers=nil)
         begin
+            @error = nil
             return URI.open(uri, headers || {})
-        rescue => _
+        rescue => e
+            @error = "Failed to open URI (#{uri}):\n- ERROR: #{e}"
             return nil
         end
+    end
+
+    def uri_open_safe_silent(uri, headers=nil)
+        uri_open_safe(uri, headers, true)
     end
 
     def http_get(uri, headers = nil)
@@ -60,16 +69,9 @@ class GithubAPI
         end
     end
 
-    def http_get_absolute(endpoint = nil, replace_params = nil)
-        if endpoint != nil
-            if replace_params
-                endpoint = GithubAPI.sub_route_params(endpoint, replace_params)
-            end
-
-            return http_get(endpoint, default_headers())
-        end
-
-        return nil
+    def http_get_absolute(endpoint, replace_params = nil)
+        endpoint = GithubApi.sub_route_params(endpoint, replace_params)
+        return http_get(endpoint, default_headers())
     end
 
     def http_get_relative(endpoint = nil)
@@ -91,15 +93,26 @@ class GithubAPI
         }
     end
 
+    def self.default_auth_headers(token)
+        headers = GithubApi.default_headers
+        if token
+            headers["Authorization"] = "Bearer #{token}"
+        end
+        return headers
+    end
+
     def default_headers()
-        headers = GithubAPI.default_headers()
+        headers = GithubApi.default_headers
         if @auth_token 
             headers["Authorization"] = "Bearer #{@auth_token}"
         end
         return headers
     end
 
-    def self.sub_route_params(text, params)
+    def self.sub_route_params(text, params=nil)
+        if !params then return text.gsub(/\{.*?\}/, '') end
+        if params.is_a? String then return text.gsub(/\{.*?\}/, params) end
+
         for param in params 
             text = text.sub(/\{.*?\}/, param) 
         end

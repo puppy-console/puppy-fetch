@@ -1,0 +1,57 @@
+#!/usr/bin/env ruby
+
+require 'puppy-fetch'
+require 'benchmark'
+
+settings = PuppyFetch.as_cli
+pf = PuppyFetch.new(settings)
+
+puts "\n"
+time = Benchmark.measure do 
+    qualified_repo_name = "#{settings.owner}/#{settings.repo}"
+    repo = pf.get_repo
+    pf.assert(repo, "Unable to retrieve repository from #{qualified_repo_name}, check the name or try again later.")
+    
+    branches = pf.get_branches(repo)
+    pf.assert(branches, "Unable to retrieve branches from #{qualified_repo_name}.")
+
+    PuppyFetch.thread_process(branches) do |branch|
+        branch_name = branch['name']
+
+        if settings.branch_regex.match(branch_name)
+            branch_sha = branch['commit']['sha']
+            puts "Getting file(s) from (#{branch_sha}) - '#{branch_name}'..."
+
+            branch_head_request = pf.api.http_get_absolute(repo['trees_url'], '/' + branch_sha)
+            if !branch_head_request
+                STDERR.puts "Unable to get branch head for #{branch_name}."
+                next
+            end
+            branch_head = branch_head_request['tree']
+
+
+            if settings.source
+                source_name, source_result = pf.search_for_source(branch_head, settings.source)
+                final_destination = if settings.destination then
+                    "#{settings.destination}/#{branch_name}/#{source_name}"
+                else
+                    "#{branch_name}/#{source_name}"
+                end
+
+                pf.clone_tree(
+                    source_result, final_destination, settings.file_regex, settings.verbose)
+            else
+                final_dest = if settings.destination then 
+                    "#{settings.destination}/#{branch_name}" 
+                else 
+                    branch_name 
+                end
+                pf.clone_tree(branch_head, final_dest, settings.file_regex, settings.verbose)
+            end
+        end
+    end
+end
+puts "\n"
+
+puts "Finished in #{'%.2f' % time.real}s!"
+puts pf.get_rate_limit_pretty if settings.verbose
