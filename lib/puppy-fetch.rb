@@ -103,6 +103,7 @@ class PuppyFetch
         cli_settings.branch_regex = /^(main|\d+\.\d+)$/
         cli_settings.verbose = false
         cli_settings.destination = "out"
+        cli_settings.flat = false
 
         parser = OptionParser.new do |opts|
             opts.banner = banner
@@ -113,7 +114,8 @@ class PuppyFetch
             opts.on('-s', '--src <source>', 'sets the source to fetch from, if the directory/file is unavailable in the branch it is not cloned.') { |o| cli_settings.source = o }
             opts.on('-d', '--dest <destination>', 'sets the destination location to clone the files to.' ) { |o| cli_settings.destination = o }
             opts.on('-t', '--github-token', 'uses a github personal access token to authenticate, highly recommended.') { |o| ENV['GITHUB_TOKEN'] = o }
-            opts.on('-v', '--verbose', 'more program logs at runtime.') { |o| cli_settings.verbose = true }
+            opts.on('-f', '--flat', 'gets a flat list of files instead of cloning recursively.') { cli_settings.flat = true}
+            opts.on('-v', '--verbose', 'more program logs at runtime.') { cli_settings.verbose = true }
             opts.separator ''
         end
 
@@ -138,6 +140,7 @@ class PuppyFetch
         attr_accessor :source
         attr_accessor :destination
         attr_accessor :verbose
+        attr_accessor :flat
     end
 
     def clone_tree(tree, path, file_regex=nil, verbose=false)
@@ -159,11 +162,13 @@ class PuppyFetch
     def clone_item(item, path, file_regex=nil, verbose=false)
         case item['type']
             when 'tree'
-                puts "Creating #{path}/#{item['path']} ... !" if verbose
-                tree_head = api.http_get_absolute(item['url'])
-                return if !tree_head
-                tree = tree_head['tree']
-                clone_tree(tree, "#{path}/#{item['path']}", file_regex, verbose)
+                if !@settings.flat
+                    puts "Creating #{path}/#{item['path']} ... !" if verbose
+                    tree_head = api.http_get_absolute(item['url'])
+                    return if !tree_head
+                    tree = tree_head['tree']
+                    clone_tree(tree, "#{path}/#{item['path']}", file_regex, verbose)
+                end
             when 'blob'
                 if !Dir.exist? path then FileUtils.mkdir_p "#{path}/#{item['path']}" end
                 puts "Writing #{path}/#{item['path']} ... !" if verbose
