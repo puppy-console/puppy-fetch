@@ -32,4 +32,10 @@ bundle exec puppy-fetch
 require 'puppy-fetch'
 ```
 
+# Troubleshooting
+
+| ✖️ Problem                                          | ✔️ Solution                                                                                                       |
+|-----------------------------------------------------|-------------------------------------------------------------------------------------------------------------------|
+|  `Unable to retrieve repository from 'owner/repo'.` | `- You have a typo in your owner name or repository name.`<br>`- You have exceeded your rate limit for the hour.` |  
+
 ---
