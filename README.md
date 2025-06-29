@@ -1,45 +1,34 @@
----
-
 # Prerequisites:
+
+---
 
 - ruby >= 3.2
 - git
 
 ---
 
-# Installation:
+# Installation
 
-1. Clone the repo:
+---
+
+1. Add to Gemfile:
 ```
-git clone https://github.com/puppy-console/puppy-fetch
-```
-2. Move into the directory:
-```
-cd puppy-fetch
+gem "puppy-fetch", git: "https://github.com/puppy-tools/puppy-fetch.git"
 ```
 
-# Using the CLI:
-
-1. Add an alias ( `RECOMMENDED` ):
+2. Bundle Install:
 ```
-alias puppy-fetch="ruby -I lib bin/puppy-fetch"
+bundle install
 ```
 
-2. Run ( `puppy-fetch -h` for help with options ):
-```
-puppy-fetch <owner> <repo> [OPTIONS]
-```
+# Usage
 
-# Using the library:
-
-1. Build the gem:
-
+3. Using as CLI:
 ```
-gem build .gemspec
+bundle exec puppy-fetch GITHUB_OWNER GITHUB_REPO [options]
 ```
 
-2. Require the gem: 
-
+4. Using as Library:
 ```
 require 'puppy-fetch'
 ```
