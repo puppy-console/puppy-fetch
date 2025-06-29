@@ -16,7 +16,7 @@ jobs:
       - name: "Setup Ruby"
         uses: 'ruby/setup-ruby@v1'
       - name: "Build Gem"
-        run: gem build .gemspec
+        run: gem build puppy-fetch.gemspec
       - name: "Test Binary"
         run: ruby -I lib bin/puppy-fetch
 
