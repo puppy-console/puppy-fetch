@@ -1,0 +1,21 @@
+name: 'Release'
+
+on: workflow_dispatch
+
+jobs:
+  new-release:
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v4"
+      
+      - name: "Setup Ruby"
+        uses: "ruby/setup-ruby@v1"
+      
+      - name: "Get Project Version"
+        run: |
+          V=$(ruby -I lib -e "require 'puppy-fetch/version' ; puts PuppyFetch::VERSION")
+          echo "GEM_VERSION=$V" >> $GITHUB_ENV
+          echo $GEM_VERSION
+
+      - name: "Build Gem"
+        run: "gem build puppy-fetch.gemspec"
