@@ -18,5 +18,5 @@ jobs:
       - name: "Build Gem"
         run: gem build .gemspec
       - name: "Test Binary"
-        run: ruby bin/puppy-fetch
+        run: ruby -I lib bin/puppy-fetch
 
