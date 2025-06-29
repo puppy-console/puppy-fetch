@@ -96,7 +96,7 @@ class PuppyFetch
         "+ #{hero_banner_edge} +" \
         "\e[0m\n" \
         "\n" \
-        "\e[33mUsage\e[0m: ruby #{$0} GITHUB-OWNER GITHUB-REPO [options]"
+        "\e[33mUsage\e[0m: puppy-fetch GITHUB-OWNER GITHUB-REPO [options]"
 
 
         cli_settings = Settings.new
