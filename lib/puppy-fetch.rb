@@ -163,7 +163,7 @@ class PuppyFetch
                 tree_head = api.http_get_absolute(item['url'])
                 return if !tree_head
                 tree = tree_head['tree']
-                clone_tree(api, tree, "#{path}/#{item['path']}", file_regex, verbose)
+                clone_tree(tree, "#{path}/#{item['path']}", file_regex, verbose)
             when 'blob'
                 if !Dir.exist? path then FileUtils.mkdir_p "#{path}/#{item['path']}" end
                 puts "Writing #{path}/#{item['path']} ... !" if verbose
