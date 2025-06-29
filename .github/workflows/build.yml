@@ -9,7 +9,12 @@ on:
 jobs:
   build-gemspec:
     name: "Build Gem"
-    uses: 'actions/checkout@v4'
-    uses: 'ruby/setup-ruby@v1'
-    run: gem build .gemspec
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout Repo"
+        uses: 'actions/checkout@v4'
+      - name: "Setup Ruby"
+        uses: 'ruby/setup-ruby@v1'
+      - name: "Build Gem"
+        run: gem build .gemspec
 
