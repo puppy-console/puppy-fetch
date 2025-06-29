@@ -5,7 +5,7 @@ on: workflow_dispatch
 jobs:
   new-release:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: "Checkout"
         uses: "actions/checkout@v4"
@@ -17,7 +17,12 @@ jobs:
         run: |
           V=$(ruby -I lib -e "require 'puppy-fetch/version' ; puts PuppyFetch::VERSION")
           echo "GEM_VERSION=$V" >> $GITHUB_ENV
-          echo $GEM_VERSION
 
       - name: "Build Gem"
-        run: "gem build puppy-fetch.gemspec"
+        run: gem build puppy-fetch.gemspec
+
+      - name: "Linux Release"
+        run: | 
+          mkdir puppy-fetch_v.$GEM_VERSION-linux 
+          mv puppy-fetch-$GEM_VERSION puppy-fetch_v.$GEM_VERSION-linux
+          ls
