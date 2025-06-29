@@ -22,12 +22,12 @@ bundle install
 
 # Usage
 
-- Using CLI:
+- As CLI:
 ```
-bundle exec puppy-fetch GITHUB_OWNER GITHUB_REPO [options]
+bundle exec puppy-fetch 
 ```
 
-- Using Library:
+- As Library:
 ```rb
 require 'puppy-fetch'
 ```
