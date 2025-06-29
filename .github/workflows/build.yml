@@ -17,4 +17,6 @@ jobs:
         uses: 'ruby/setup-ruby@v1'
       - name: "Build Gem"
         run: gem build .gemspec
+      - name: "Test Binary"
+        run: ruby bin/puppy-fetch
 
