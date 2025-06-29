@@ -112,7 +112,7 @@ class PuppyFetch
             opts.on('-X', '--branch-regex <regex>', Regexp, "filter branches in source.") { |o| cli_settings.branch_regex = o }
             opts.on('-x', '--file-regex <regex>', Regexp, "filter files in source.") { |o| cli_settings.file_regex = o }
             opts.on('-s', '--src <source>', 'sets the source to fetch from, if the directory/file is unavailable in the branch it is not cloned.') { |o| cli_settings.source = o }
-            opts.on('-d', '--dest <destination>', 'sets the destination location to clone the files to.' ) { |o| cli_settings.destination = o }
+            opts.on('-d', '--dst <destination>', 'sets the destination location to clone the files to.' ) { |o| cli_settings.destination = o }
             opts.on('-t', '--github-token', 'uses a github personal access token to authenticate, highly recommended.') { |o| ENV['GITHUB_TOKEN'] = o }
             opts.on('-f', '--flat', 'gets a flat list of files instead of cloning recursively.') { cli_settings.flat = true}
             opts.on('-v', '--verbose', 'more program logs at runtime.') { cli_settings.verbose = true }
