@@ -1,0 +1,15 @@
+name: 'Ruby'
+
+on: 
+  push:
+    branches: ['main']
+  pull-request:
+    branches: ['main']
+
+jobs:
+  build-gemspec:
+    name: "Build Gem"
+    uses: 'actions/checkout@v4'
+    uses: 'ruby/setup-ruby@v1'
+    run: gem build .gemspec
+
